@@ -21,3 +21,7 @@ node_modules/
 *.log
 *.sql
 *.sqlite
+
+# ignore CI/CD
+Jenkinsfile
+build.sh
