@@ -25,7 +25,8 @@ $count = 1;
 
 GOIT_PRMCODE()->model->database->add_promocodes($promocod, $activete_count, $activete_count_user,
 	$product, $tariff, $conditions, $date_start, $date_end, $manager, $status, $promocode_limit,
-	$promocode_used, $amount_payments, $amount_surcharge, $discount_tariff, $count);
+	$promocode_used, $amount_payments, $amount_surcharge, $discount_tariff,
+	$count, $msg_success, $msg_not_found, $msg_data_end);
 ?>
 
 <section class="goit-add-promocode">

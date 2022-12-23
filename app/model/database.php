@@ -22,17 +22,15 @@ class database extends model
 			date_start DATE,
 			date_end DATE,
 			manager VARCHAR(50) NOT NULL,			
-			status smallint(1) NOT NULL,
+			promo_status smallint(1) NOT NULL,
 			promocode_limit mediumint(4),
 			promocode_used mediumint(9),
 			amount_payments mediumint(6),
 			amount_surcharge mediumint(9),
 			discount_tariff VARCHAR(10) NOT NULL,
-			-- Повідомлення при активації
-			msg_success VARCHAR(50) NOT NULL DEFAULT 'Промокод активовано!',
-			msg_not_found VARCHAR(50) NOT NULL DEFAULT 'На жаль такого промокода не існує.',
-			msg_data_end VARCHAR(50) NOT NULL DEFAULT 'На жаль термін дії промокоду закінчився.',
-
+			msg_success VARCHAR(50) NOT NULL,
+			msg_not_found VARCHAR(50) NOT NULL,
+			msg_data_end VARCHAR(50) NOT NULL,
 			UNIQUE KEY id (id)
 		);";
 		$order = "CREATE TABLE {$this->tables['order']} (
@@ -55,8 +53,10 @@ class database extends model
 	{
 		$sql = "DROP TABLE IF EXISTS {$this->tables['promocodes']}";
 		$this->wpdb->query($sql);
+		$sql = "DROP TABLE IF EXISTS {$this->tables['order']}";
+		$this->wpdb->query($sql);
 	}
-	
+
 	/**
 	 * It takes a bunch of parameters, and if the count parameter is 1, it inserts a row into the database
 	 * with the parameters as the values. If the count parameter is greater than 1, it inserts a bunch of
@@ -72,7 +72,7 @@ class database extends model
 	 * @param date_start The date the coupon starts being valid.
 	 * @param date_end The date the coupon expires.
 	 * @param manager the user ID of the manager who created the promo code
-	 * @param status 0 - inactive, 1 - paused, 2 - active
+	 * @param promo_status 0 - inactive, 1 - paused, 2 - active
 	 * @param promocode_limit The number of times the coupon can be used.
 	 * @param promocode_used The number of times the coupon has been used.
 	 * @param amount_payments The amount of payments that the user must make to activate the promo code.
@@ -83,8 +83,11 @@ class database extends model
 
 	public function add_promocodes(
 		$promocod, $activete_count, $activete_count_user, $product, $tariff, $conditions,
-		$date_start, $date_end, $manager, $status, $promocode_limit, $promocode_used,
-		$amount_payments, $amount_surcharge, $discount_tariff, $count = 1)
+		$date_start, $date_end, $manager, $promo_status, $promocode_limit, $promocode_used,
+		$amount_payments, $amount_surcharge, $discount_tariff,
+		$count = 1,
+		$msg_success = 'Промокод активовано!',
+		$msg_not_found = 'На жаль такого промокода не існує.', $msg_data_end = 'На жаль термін дії промокоду закінчився.')
 	{
 		$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -99,12 +102,15 @@ class database extends model
 				'date_start'          => $date_start,
 				'date_end'            => $date_end,
 				'manager'             => $manager,
-				'status'              => $status,
-				'promocode_limit'        => $promocode_limit,
-				'promocode_used'         => $promocode_used,
+				'promo_status'        => $promo_status,
+				'promocode_limit'     => $promocode_limit,
+				'promocode_used'      => $promocode_used,
 				'amount_payments'     => $amount_payments,
 				'amount_surcharge'    => $amount_surcharge,
 				'discount_tariff'     => $discount_tariff,
+				'msg_success'         => $msg_success,
+				'msg_not_found'       => $msg_not_found,
+				'msg_data_end'        => $msg_data_end
 			);
 			$this->wpdb->insert("{$this->tables['promocodes']}", $request);
 		} else {
@@ -120,12 +126,16 @@ class database extends model
 					'date_start'          => $date_start,
 					'date_end'            => $date_end,
 					'manager'             => $manager,
-					'status'              => $status,
-					'promocode_limit'        => $promocode_limit,
-					'promocode_used'         => $promocode_used,
+					'promo_status'        => $promo_status,
+					'promocode_limit'     => $promocode_limit,
+					'promocode_used'      => $promocode_used,
 					'amount_payments'     => $amount_payments,
 					'amount_surcharge'    => $amount_surcharge,
-					'discount_tariff'     => $discount_tariff
+					'discount_tariff'     => $discount_tariff,
+					'msg_success'         => $msg_success,
+					'msg_not_found'       => $msg_not_found,
+					'msg_data_end'        => $msg_data_end
+
 				);
 				$this->wpdb->insert("{$this->tables['promocodes']}", $request);
 			}

@@ -1,2 +1,2 @@
-# goiteens-coupons
-Goiteens Coupons
+# goit-promocodes
+Goiteens Promocodes

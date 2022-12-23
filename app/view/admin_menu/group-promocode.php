@@ -53,9 +53,9 @@ foreach ($data['group_array'] as $item):
 		$promocode_limit += $item->promocode_limit;
 
 	if (empty($status)) {
-		$status = $item->status;
-		if ($item->status > $status)
-			$status = $item->status;
+		$status = $item->promo_status;
+		if ($item->status > $promo_status)
+			$status = $item->promo_status;
 	}
 
 	$promocod = $item->promocod_group;
