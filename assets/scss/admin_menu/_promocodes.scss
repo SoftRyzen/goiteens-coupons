@@ -1,0 +1,135 @@
+.goit-promocodes {
+	&__header-wrapper {
+		background: $white;
+		margin-left: -32px;
+		padding: 32px;
+		display: flex;
+		align-items: center;
+		* {
+			font-family: $font;
+		}
+		h1 {
+			display: inline-flex;
+		}
+		.page-title-action {
+			margin-left: 24px;
+			padding: 8px 18px;
+			position: relative;
+			text-decoration: none;
+			border: 1px solid $primary;
+			border-radius: 2px;
+			text-shadow: none;
+			font-weight: 600;
+			font-size: 13px;
+			line-height: normal;
+			color: $primary;
+			background: #f6f7f7;
+			cursor: pointer;
+			&:hover {
+				background: #f0f0f1;
+				border-color: $accent;
+				color: $accent;
+			}
+		}
+		form {
+			margin-left: auto;
+		}
+	}
+	&__table {
+		font-family: $font;
+		margin-top: 40px;
+		margin-right: 20px;
+		& > *:nth-child(odd):not(:last-child) {
+			background: #f6f7f7;
+			&.inactive {
+				background: rgba(224, 100, 100, 0.15);
+			}
+		}
+		@media (max-width: 1280px) {
+			overflow-x: scroll;
+		}
+		&-header {
+			display: flex;
+			> * {
+				font-weight: bold;
+				width: calc(12.5% - 6.5px);
+				min-width: 105px;
+				padding: 10px;
+				background: #2271b1;
+				color: #fff;
+				&:first-child {
+					width: 50px;
+					min-width: 50px;
+				}
+			}
+		}
+	}
+	&__item,
+	&__group {
+		display: flex;
+		min-height: 60px;
+		> * {
+			width: calc(12.5% - 6.5px);
+			min-width: 105px;
+			padding: 0 10px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			&:first-child {
+				width: 50px;
+				min-width: 50px;
+			}
+		}
+		a {
+			color: #1b1b1b;
+			text-decoration: none;
+			overflow: hidden;
+			word-break: break-word;
+			&:hover {
+				color: #135e96;
+			}
+		}
+		&-limit {
+			text-align: center;
+			.percent {
+				position: relative;
+				width: 100%;
+				height: 12px;
+				margin: 5px 0;
+				background: #ddd;
+				border-radius: 4px;
+				span {
+					height: 12px;
+					background: #22b14d;
+					border-radius: 4px;
+					position: absolute;
+					left: 0;
+					top: 0;
+				}
+			}
+		}
+		&-status {
+			.inactive,
+			.paused,
+			.actived {
+				padding: 6px 10px 5px;
+				border-radius: 4px;
+				text-align: center;
+				color: $white;
+			}
+
+			.inactive {
+				background: $red;
+			}
+			.paused {
+				background: $primary;
+			}
+			.actived {
+				background: $green;
+			}
+		}
+		.row-actions {
+			display: none !important;
+		}
+	}
+}
