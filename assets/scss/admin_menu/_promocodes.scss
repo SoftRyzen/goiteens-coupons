@@ -1,110 +1,157 @@
 .goit-promocodes {
-	&__header-wrapper {
-		background: $white;
-		margin-left: -32px;
-		padding: 32px;
-		display: flex;
-		align-items: center;
-		* {
-			font-family: $font;
-		}
-		h1 {
-			display: inline-flex;
-		}
-		.page-title-action {
-			margin-left: 24px;
-			padding: 8px 18px;
-			position: relative;
-			text-decoration: none;
-			border: 1px solid $primary;
-			border-radius: 2px;
-			text-shadow: none;
-			font-weight: 600;
-			font-size: 13px;
-			line-height: normal;
-			color: $primary;
-			background: #f6f7f7;
-			cursor: pointer;
-			&:hover {
-				background: #f0f0f1;
-				border-color: $accent;
-				color: $accent;
-			}
-		}
-		form {
-			margin-left: auto;
-		}
-	}
+	min-height: 100vh;
 	&__table {
 		font-family: $font;
-		margin-top: 40px;
+
+		background: #ffffff;
+		box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
+		border-radius: 8px;
+		padding: 24px 0;
+		margin-top: 24px;
 		margin-right: 20px;
-		& > *:nth-child(odd):not(:last-child) {
-			background: #f6f7f7;
-			&.inactive {
+
+		&-body > *:nth-child(even) {
+			& > * {
+				background: #f6f7f7;
+			}
+		}
+		& > * {
+			&.inactive > * {
 				background: rgba(224, 100, 100, 0.15);
 			}
 		}
 		@media (max-width: 1280px) {
 			overflow-x: scroll;
 		}
-		&-header {
+		&-tabs {
+			margin: 0 24px 24px 24px;
 			display: flex;
-			> * {
-				font-weight: bold;
-				width: calc(12.5% - 6.5px);
-				min-width: 105px;
-				padding: 10px;
-				background: #2271b1;
-				color: #fff;
-				&:first-child {
-					width: 50px;
-					min-width: 50px;
+			a {
+				color: $text-color;
+				padding: 8px 16px;
+				text-decoration: none;
+				border-radius: 50px;
+				&.active,
+				&:hover,
+				&:focus {
+					outline: none;
+					color: $white;
+					background: $primary;
+					box-shadow: none;
 				}
 			}
+		}
+		&-header {
+			display: flex;
+			box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
+			> * {
+				display: flex;
+				align-items: center;
+				width: calc(10% - 6.5px);
+				min-width: 90px;
+				height: 40px;
+				padding: 5px 10px;
+				background: #1d2327 !important;
+				color: #fff;
+				font-weight: 600;
+				&:first-child {
+					width: 90px;
+					min-width: 90px;
+				}
+				&:nth-child(2) {
+					width: calc(30% - 6.5px);
+					min-width: 180px;
+				}
+				&:nth-child(8) {
+					min-width: 135px;
+				}
+
+				&:last-child {
+					min-width: 120px;
+				}
+			}
+		}
+		&-footer {
+			margin: 24px 24px 0 24px;
+		}
+		.not_found {
+			font-size: 16px;
+			padding: 21px;
+			background: $primary;
+			color: $white;
+			text-align: center;
 		}
 	}
 	&__item,
 	&__group {
 		display: flex;
 		min-height: 60px;
+		&.in-progress {
+			opacity: 0.3;
+			&,
+			* {
+				cursor: wait;
+			}
+		}
 		> * {
-			width: calc(12.5% - 6.5px);
-			min-width: 105px;
+			width: calc(10% - 6.5px);
 			padding: 0 10px;
+			min-width: 90px;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
 			&:first-child {
-				width: 50px;
-				min-width: 50px;
+				width: 90px;
+				min-width: 90px;
+			}
+			&:nth-child(2) {
+				width: calc(30% - 6.5px);
+				min-width: 180px;
+			}
+			&:nth-child(8) {
+				min-width: 135px;
+			}
+			&:last-child {
+				min-width: 120px;
+				width: calc(10% - 6.5px);
+				text-align: center;
 			}
 		}
 		a {
 			color: #1b1b1b;
 			text-decoration: none;
 			overflow: hidden;
-			word-break: break-word;
-			&:hover {
-				color: #135e96;
+			text-overflow: ellipsis;
+			&:hover,
+			&:focus,
+			&:active {
+				color: $primary-dark;
+				box-shadow: none;
+				outline: none;
 			}
 		}
 		&-limit {
 			text-align: center;
+			color: $gray-color;
 			.percent {
 				position: relative;
 				width: 100%;
-				height: 12px;
+				height: 16px;
 				margin: 5px 0;
-				background: #ddd;
+				background: #e9ecef;
+				box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.1);
 				border-radius: 4px;
-				span {
-					height: 12px;
-					background: #22b14d;
+				span.bar {
+					height: 16px;
+					color: #fff;
+					background: #3a57e8;
 					border-radius: 4px;
 					position: absolute;
 					left: 0;
 					top: 0;
+					&.done {
+						background: #1aa053;
+					}
 				}
 			}
 		}
@@ -128,8 +175,26 @@
 				background: $green;
 			}
 		}
-		.row-actions {
-			display: none !important;
+		.actions {
+			height: 0px;
+			overflow: hidden;
+			transition: all 0.1s ease-in;
+			a {
+				color: $gray-color;
+				&:hover,
+				&:focus,
+				&:active {
+					color: $accent;
+					box-shadow: none;
+					outline: none;
+				}
+			}
+		}
+		&:hover {
+			.actions {
+				height: 18px;
+				transition: all 0.1s ease-in;
+			}
 		}
 	}
 }

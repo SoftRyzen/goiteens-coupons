@@ -4,6 +4,9 @@
   "description": "",
   "main": "gulpfile.js",
   "dependencies": {
+    "@amcharts/amcharts5": "^5.2.45",
+    "@amcharts/amcharts5-fonts": "^5.0.1",
+    "@amcharts/amcharts5-geodata": "^5.1.0",
     "@babel/preset-env": "^7.18.2",
     "ansi-gray": "^0.1.1",
     "ansi-regex": "^2.1.1",
@@ -23,6 +26,7 @@
     "balanced-match": "^1.0.2",
     "base": "^0.11.2",
     "beeper": "^1.1.1",
+    "bootstrap": "^4.6.0",
     "brace-expansion": "^1.1.11",
     "braces": "^2.3.2",
     "cache-base": "^1.0.1",

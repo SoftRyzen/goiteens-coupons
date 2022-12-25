@@ -1,6 +1,9 @@
 "use strict";
 
 const
+	jsLibs = [
+		'./node_modules/bootstrap/dist/js/bootstrap.min.js',
+	],
 	jsWatch = [
 		'./assets/js/app.js'
 	],
@@ -58,6 +61,10 @@ function scssTask() {
 // JS Task: minify scripts
 function jsTask() {
 
+	const libsFiles = src(jsLibs)
+		.pipe(concat('libs.min.js'))
+		.pipe(dest('./assets/js/'));
+
 	const jsBackFiles = src(jsFiles, { base: './' })
 		.pipe(babel({
 			presets: [
@@ -70,7 +77,7 @@ function jsTask() {
 		.pipe(concat('app.min.js'))
 		.pipe(dest('./assets/js/'));
 
-	return merge(jsBackFiles);
+	return merge(libsFiles, jsBackFiles);
 
 }
 

@@ -1,7 +1,6 @@
 <?php
 namespace goit_prmcode\model;
 
-
 class database extends model
 {
 
@@ -10,11 +9,12 @@ class database extends model
 	 */
 	public function create_table()
 	{
+		$charset = $this->wpdb->get_charset_collate();
 		$promocodes = "CREATE TABLE {$this->tables['promocodes']} (
 			id mediumint(9) NOT NULL AUTO_INCREMENT,
 			promocod VARCHAR(40) NOT NULL,
 			promocod_group VARCHAR(35),
-			activete_count INTEGER NOT NULL,
+			activete_count INTEGER DEFAULT 0,
 			activete_count_user INTEGER NOT NULL,
 			product VARCHAR(55) NOT NULL,
 			conditions VARCHAR(50) NOT NULL,
@@ -23,22 +23,22 @@ class database extends model
 			date_end DATE,
 			manager VARCHAR(50) NOT NULL,			
 			promo_status smallint(1) NOT NULL,
-			promocode_limit mediumint(4),
-			promocode_used mediumint(9),
-			amount_payments mediumint(6),
+			promocode_limit mediumint(4) NOT NULL,
+			promocode_used mediumint(9) DEFAULT 0,
+			amount_payments mediumint(6) DEFAULT 0,
 			amount_surcharge mediumint(9),
 			discount_tariff VARCHAR(10) NOT NULL,
-			msg_success VARCHAR(50) NOT NULL,
-			msg_not_found VARCHAR(50) NOT NULL,
-			msg_data_end VARCHAR(50) NOT NULL,
+			msg_success VARCHAR(50),
+			msg_not_found VARCHAR(50),
+			msg_data_end VARCHAR(50),
 			UNIQUE KEY id (id)
-		);";
+		) $charset;";
 		$order = "CREATE TABLE {$this->tables['order']} (
 			id mediumint(9) NOT NULL AUTO_INCREMENT,
-			promocod VARCHAR(40) NOT NULL,
-			date_order DATE,
+			promocod_id mediumint(9) NOT NULL,
+			date_order DATE NOT NULL,
 			UNIQUE KEY id (id)
-		);";
+		) $charset;";
 
 		echo ABSPATH . 'wp-admin/includes/upgrade.php';
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -82,19 +82,19 @@ class database extends model
 	 */
 
 	public function add_promocodes(
-		$promocod, $activete_count, $activete_count_user, $product, $tariff, $conditions,
-		$date_start, $date_end, $manager, $promo_status, $promocode_limit, $promocode_used,
-		$amount_payments, $amount_surcharge, $discount_tariff,
-		$count = 1,
+		$promocod, $activete_count_user, $product, $tariff, $conditions,
+		$date_start, $date_end, $manager, $promo_status, $promocode_limit,
+		$amount_surcharge, $discount_tariff, $count = 1,
 		$msg_success = 'Промокод активовано!',
-		$msg_not_found = 'На жаль такого промокода не існує.', $msg_data_end = 'На жаль термін дії промокоду закінчився.')
+		$msg_not_found = 'На жаль такого промокода не існує.',
+		$msg_data_end = 'На жаль термін дії промокоду закінчився.')
 	{
 		$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 		if ($count == 1) {
 			$request = array(
 				'promocod'            => $promocod,
-				'activete_count'      => $activete_count,
+				'activete_count'      => 0,
 				'activete_count_user' => $activete_count_user,
 				'product'             => $product,
 				'tariff'              => $tariff,
@@ -104,21 +104,21 @@ class database extends model
 				'manager'             => $manager,
 				'promo_status'        => $promo_status,
 				'promocode_limit'     => $promocode_limit,
-				'promocode_used'      => $promocode_used,
-				'amount_payments'     => $amount_payments,
+				'promocode_used'      => 0,
+				'amount_payments'     => 0,
 				'amount_surcharge'    => $amount_surcharge,
 				'discount_tariff'     => $discount_tariff,
 				'msg_success'         => $msg_success,
 				'msg_not_found'       => $msg_not_found,
 				'msg_data_end'        => $msg_data_end
 			);
-			$this->wpdb->insert("{$this->tables['promocodes']}", $request);
+			return $this->wpdb->insert("{$this->tables['promocodes']}", $request);
 		} else {
 			for ($i = 0; $i < $count; $i++) {
 				$request = array(
 					'promocod'            => $promocod . '_' . substr(str_shuffle($permitted_chars), 0, 4),
 					'promocod_group'      => $promocod,
-					'activete_count'      => $activete_count,
+					'activete_count'      => 0,
 					'activete_count_user' => $activete_count_user,
 					'product'             => $product,
 					'tariff'              => $tariff,
@@ -128,38 +128,92 @@ class database extends model
 					'manager'             => $manager,
 					'promo_status'        => $promo_status,
 					'promocode_limit'     => $promocode_limit,
-					'promocode_used'      => $promocode_used,
-					'amount_payments'     => $amount_payments,
+					'promocode_used'      => 0,
+					'amount_payments'     => 0,
 					'amount_surcharge'    => $amount_surcharge,
 					'discount_tariff'     => $discount_tariff,
 					'msg_success'         => $msg_success,
 					'msg_not_found'       => $msg_not_found,
 					'msg_data_end'        => $msg_data_end
-
 				);
 				$this->wpdb->insert("{$this->tables['promocodes']}", $request);
 			}
+			return true;
 		}
 	}
 
 	/**
-	 * It gets all the coupons from the database
+	 * It returns a list of promocodes from the database, optionally filtered by a search term and/or a
+	 * status.
 	 * 
-	 * @return Array An array of objects.
+	 * @param sort This is the search term. If you want to search for a specific promo code, you can enter
+	 * it here.
+	 * @param status 2 = active, 1 = paused, 0 = inactive
+	 * 
+	 * @return Array The query is returning all the promocodes from the database.
 	 */
-	public function get_promocodes($order = 'ASC')
+	public function get_promocodes($sort = false, $status = 2)
 	{
-		return $this->wpdb->get_results("SELECT * FROM {$this->tables['promocodes']}");
+		$query = "SELECT * FROM {$this->tables['promocodes']} ";
+		if ($sort)
+			$query .= "WHERE promocod like '%{$sort}%' or id like '%{$sort}%'";
+		$query .= " ORDER BY id DESC";
+		return $this->wpdb->get_results("$query");
 	}
 
 	/**
-	 * It returns the number of coupons in the database
+	 * It checks if a promocode name exists in the database.
 	 * 
-	 * @return Number The number of coupons in the database.
+	 * @param name The name of the promocode
+	 * @param group true/false
+	 * 
+	 * @return An array of objects.
 	 */
-	public function get_promocodes_count($order = 'ASC')
+	public function check_promocode_name($name = '', $group = false)
 	{
-		return $this->wpdb->get_var($this->wpdb->prepare("SELECT COUNT(*) FROM {$this->tables['promocodes']}"));
+		$query = "SELECT COUNT(*) FROM {$this->tables['promocodes']} ";
+		if ($group)
+			$query .= "WHERE promocod_group = '{$name}'";
+		else
+			$query .= "WHERE promocod = '{$name}'";
+		return $this->wpdb->get_var("$query");
 	}
+
+	/**
+	 * It returns the number of rows in the database table
+	 * 
+	 * @param sort The search term
+	 * @param status 2 = active, 1 = paused, 0 = inactive
+	 * 
+	 * @return The number of rows in the table.
+	 */
+	public function get_promocodes_count($sort = false, $status = 2)
+	{
+		$query = "SELECT COUNT(*) FROM {$this->tables['promocodes']} ";
+		if ($sort)
+			$query .= "WHERE promocod like '%{$sort}%' or id like '%{$sort}%'";
+		$query .= " ORDER BY id DESC";
+		return $this->wpdb->get_var($this->wpdb->prepare("$query"));
+	}
+
+	/**
+	 * Change the status of a promocode
+	 */
+	public function change_promocode_status($id, $status, $type)
+	{
+		$query = "UPDATE {$this->tables['promocodes']} SET promo_status = {$status} WHERE ";
+		if ($type == 'item') {
+			$query .= "id = {$id}";
+			return $this->wpdb->get_results($this->wpdb->prepare($query));
+		} else {
+			foreach ($this->get_promocodes($id) as $promocode):
+				$query .= "id = {$promocode->id}";
+				$this->wpdb->get_results($this->wpdb->prepare($query));
+			endforeach;
+			return;
+		}
+	}
+
+
 
 }

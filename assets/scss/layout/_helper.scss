@@ -1,0 +1,35 @@
+.goit-primary-btn,
+.goit-secondary-btn {
+	border-radius: 4px;
+	color: #fff;
+	padding: 8px 24px;
+	letter-spacing: 0.5px;
+	text-decoration: none;
+	text-align: center;
+	transition: all 0.2s ease-in-out;
+	&:hover,
+	&:focus,
+	&:active {
+		color: $white;
+		transition: all 0.2s ease-in-out;
+		box-shadow: none;
+		outline: none;
+	}
+	&[disabled] {
+		cursor: not-allowed;
+		box-shadow: none;
+	}
+}
+.goit-primary-btn {
+	background-color: $primary;
+	box-shadow: 0px 2px 4px rgba(58, 87, 232, 0.3);
+	&[disabled] {
+		background-color: $primary-accent;
+	}
+}
+.goit-secondary-btn {
+	background: $accent;
+}
+.hidden {
+	display: none !important;
+}

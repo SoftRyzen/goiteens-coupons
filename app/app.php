@@ -76,6 +76,7 @@ class app
 		$controllers = [
 			'backend',
 			'plugin_settings',
+			'ajax',
 		];
 
 		$this->_load_controllers($controllers);

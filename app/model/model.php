@@ -8,7 +8,6 @@ class model
 	protected $tables = [];
 	protected $table_name;
 
-
 	public function __construct()
 	{
 		global $wpdb;

@@ -26,13 +26,23 @@ class backend
 	 */
 	function load_assets()
 	{
-		wp_enqueue_style('goiteens-coupons-admin', plugins_url('/assets/scss/app.min.css', GOIT_PRMCODE_FILE), false, '1.0');
+		wp_enqueue_style('goiteens-promocodes-admin', plugins_url('/assets/scss/app.min.css', GOIT_PRMCODE_FILE), false, '1.0');
 
-		wp_enqueue_script('goiteens-coupons-admin',
+		wp_enqueue_script('goiteens-promocodes-libs',
+			plugins_url('/assets/js/libs.min.js', GOIT_PRMCODE_FILE)
+		);
+
+		wp_enqueue_script('goiteens-promocodes-admin',
 			plugins_url('/assets/js/app.min.js', GOIT_PRMCODE_FILE),
 			['jquery'], '1.0', true
 		);
 
+		wp_localize_script('goiteens-promocodes-admin', 'pluginVars', [
+			'ajaxurl'   => admin_url('admin-ajax.php'),
+			'ajaxNonce' => wp_create_nonce('wa_ajax_nonce'),
+			'adminURL'  => admin_url('/admin.php?page=goit_promocode'),
+			'postURL'  => admin_url('/admin.php?page=goit_promocode_post'),
+		]);
 
 	}
 
