@@ -14,8 +14,9 @@ class model
 		$this->wpdb = $wpdb;
 		$this->tables = [
 			'promocodes' => $this->wpdb->prefix . 'goit_promocodes',
-			'group' => $this->wpdb->prefix . 'goit_group',
 			'order' => $this->wpdb->prefix . 'goit_order',
+			'tariff' => $this->wpdb->prefix . 'goit_tariff',
+			'products' => $this->wpdb->prefix . 'goit_products',
 		];
 		$this->tables = apply_filters('goit_promocodes_tables', $this->tables, $this);
 	}

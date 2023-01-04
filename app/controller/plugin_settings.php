@@ -32,7 +32,7 @@ class plugin_settings
 	 */
 	function deactivation_promocodes()
 	{
-		GOIT_PRMCODE()->model->database->drop_table();
+		// GOIT_PRMCODE()->model->database->drop_table();
 	}
 
 }

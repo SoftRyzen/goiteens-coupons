@@ -4,27 +4,12 @@
 
 		constructor() {
 
-			this.setupAdminPanel()
-			this.setupPromocodesPage()
-			this.setupAddPage()
-		}
-
-		setupAdminPanel() {
-
-			document.readyState
-			const
-				promocode = $('#toplevel_page_goit_promocode'),
-				promocode_link = $('#toplevel_page_goit_promocode > a');
-
-			promocode_link.removeClass('wp-not-current-submenu');
-			promocode_link.addClass('wp-has-current-submenu');
-			promocode.removeClass('wp-not-current-submenu');
-			promocode.addClass('wp-has-current-submenu');
-			promocode.addClass('wp-menu-open');
+			this.setupPromocodesPage();
+			this.setupPages();
+			this.setupDatepiker();
 		}
 
 		setupPromocodesPage() {
-
 			/**
 			 * "When the user types in the search input, the value of the input is taken and added to the action
 			 * attribute of the form." <code>
@@ -103,33 +88,33 @@
 			});
 		}
 
-		setupAddPage() {
+		setupPages() {
 			const
-				$body = $('.goit-add__body '),
-				$selectedProducts = $('.goit-add__body .selected-products'),
-				$addButton = $('.goit-add__body #add_promocode'),
+				$body = $('.goit__body'),
+				$selectedProducts = $('.goit__body .selected-products'),
+				$addButton = $('.goit__body #add_promocode'),
+				$updateButton = $('.goit__body #update_promocode'),
 				// All inputs
-				$input = $('.goit-add__body input'),
-				$textarea = $('.goit-add__body textarea'),
+				$input = $('.goit__body input'),
+				$textarea = $('.goit__body textarea'),
 				// Inputs
-				$promocod = $('.goit-add__body input#promocod'),
-				$count = $('.goit-add__body input#count'),
-				$activete_count_user = $('.goit-add__body input#activete_count_user'),
-				$product = $('.goit-add__body input#products'),
-				$productSelect = $('.goit-add__body select#product'),
-				$conditions = $('.goit-add__body textarea#conditions'),
-				$tariff = $('.goit-add__body select#tariff'),
-				$date_start = $('.goit-add__body input#date_start'),
-				$date_end = $('.goit-add__body input#date_end'),
-				$manager = $('.goit-add__body input#manager'),
-				$status = $('.goit-add__body select#status'),
-				$promocode_limit = $('.goit-add__body input#promocode_limit'),
-				$amount_surcharge = $('.goit-add__body input#amount_surcharge'),
-				$discount_tariff = $('.goit-add__body select#discount_tariff'),
-				$msg_success = $('.goit-add__body textarea#msg_success'),
-				$msg_not_found = $('.goit-add__body textarea#msg_not_found'),
-				$msg_data_end = $('.goit-add__body textarea#msg_data_end');
-
+				$promocod = $('.goit__body input#promocod'),
+				$count = $('.goit__body input#count'),
+				$activete_count_user = $('.goit__body input#activete_count_user'),
+				$product = $('.goit__body input#products'),
+				$productSelect = $('.goit__body select#product'),
+				$conditions = $('.goit__body textarea#conditions'),
+				$tariff = $('.goit__body select#tariff'),
+				$date_start = $('.goit__body input#date_start'),
+				$date_end = $('.goit__body input#date_end'),
+				$manager = $('.goit__body input#manager'),
+				$status = $('.goit__body select#status'),
+				$promocode_limit = $('.goit__body input#promocode_limit'),
+				$amount_surcharge = $('.goit__body input#amount_surcharge'),
+				$discount_tariff = $('.goit__body select#discount_tariff'),
+				$msg_success = $('.goit__body textarea#msg_success'),
+				$msg_not_found = $('.goit__body textarea#msg_not_found'),
+				$msg_data_end = $('.goit__body textarea#msg_data_end');
 			/**
 			 * It changes the value of the input field to the value of the input field.
 			 */
@@ -154,8 +139,6 @@
 						$promocod.addClass('in-progress');
 					},
 					success: function (count) {
-						console.log(count);
-
 						$promocod.removeClass('in-progress');
 
 						if (count == 0) {
@@ -205,7 +188,8 @@
 
 			/* This is a function that adds a click event to the button and sends a request to the server to add
 			a new item. */
-			$addButton.click(function () {
+			$addButton.click(function (e) {
+				e.preventDefault();
 
 				$input.removeClass('error');
 				$textarea.removeClass('error');
@@ -244,7 +228,7 @@
 				$addButton.attr('disabled', 'disabled');
 
 				let get, data = {
-					'action': 'add',
+					'action': 'ajax_add_promocodes',
 					'promocod': $promocod.val().toUpperCase(),
 					'activete_count_user': $activete_count_user.val(),
 					'product': $product.val(),
@@ -269,15 +253,133 @@
 					get = `&group=${$promocod.val()}&action=new_add`;
 				}
 
-				$.post(
-					pluginVars.postURL,
+
+				$.ajax({
+					url: pluginVars.ajaxurl,
+					type: 'POST',
+					dataType: 'JSON',
 					data,
-					function (response) {
+					success: function () {
 						window.location.replace(pluginVars.postURL + get);
 					}
-				);
+				});
+
 			});
 
+			/* Sending an AJAX request to the server. */
+			$updateButton.click(function (e) {
+				e.preventDefault();
+
+				$input.removeClass('error');
+				$textarea.removeClass('error');
+
+				if ($promocod.val() == '') {
+					$promocod.addClass('error');
+				}
+				if ($activete_count_user.val() == '') {
+					$activete_count_user.addClass('error');
+				}
+				if ($product.val() == '') {
+					$productSelect.addClass('error');
+				}
+				if ($date_start.val() == '') {
+					$date_start.addClass('error');
+				}
+				if ($promocode_limit.val() == '') {
+					$promocode_limit.addClass('error');
+				}
+				if ($amount_surcharge.val() == '') {
+					$amount_surcharge.addClass('error');
+				}
+				if ($count.val() == '') {
+					$count.addClass('error');
+				}
+
+				if ($promocod.val() == '' ||
+					$activete_count_user.val() == '' ||
+					$product.val() == '' ||
+					$date_start.val() == '' ||
+					$promocode_limit.val() == '' ||
+					$amount_surcharge.val() == '' ||
+					$count.val() == '') { return; }
+
+				$body.addClass('in-progress');
+				$updateButton.attr('disabled', 'disabled');
+
+				let get, data = {
+					'action': 'ajax_update_promocode',
+					'promocod': $promocod.val().toUpperCase(),
+					'activete_count_user': $activete_count_user.val(),
+					'product': $product.val(),
+					'tariff': $tariff.val(),
+					'conditions': $conditions.val(),
+					'date_start': $date_start.val(),
+					'date_end': $date_end.val(),
+					'promo_status': $status.val(),
+					'promocode_limit': $promocode_limit.val(),
+					'amount_surcharge': $amount_surcharge.val(),
+					'discount_tariff': $discount_tariff.val(),
+					'count': $count.val(),
+					'msg_success': $msg_success.val(),
+					'msg_not_found': $msg_not_found.val(),
+					'msg_data_end': $msg_data_end.val(),
+				}
+
+				if ($count.val() == 1) {
+					get = `&id=${$promocod.val()}&action=updated`;
+				} else {
+					get = `&group=${$promocod.val()}&action=updated`;
+				}
+
+				$.ajax({
+					url: pluginVars.ajaxurl,
+					type: 'POST',
+					dataType: 'JSON',
+					data,
+					success: function (count) {
+						console.log(count);
+						console.log(pluginVars.postURL + get);
+						window.location.replace(pluginVars.postURL + get);
+					}
+				});
+
+			});
+
+		}
+
+		setupDatepiker() {
+
+			let today = moment().format('D/M/YYYY'),
+				yesterday = moment().subtract(1, 'days').format('D/M/YYYY'),
+				week = moment().subtract(7, 'days').format('D/M/YYYY'),
+				day30 = moment().subtract(30, 'days').format('D/M/YYYY');
+
+			$('#datepicker').daterangepicker({
+				opens: 'right',
+				"ranges": {
+					"Сьогодні": [
+						today,
+						today
+					],
+					"Вчора": [
+						yesterday,
+						yesterday
+					],
+					"Остані 7 Днів": [
+						week,
+						today
+					],
+					"Остані 30 Днів": [
+						day30,
+						today
+					]
+				},
+				"alwaysShowCalendars": true,
+				"startDate": week,
+				"endDate": today
+			}, function (start, end, label) {
+				console.log("Нова дата фільтрації: " + start.format('D/M/YYYY') + ' - ' + end.format('D/M/YYYY'));
+			});
 		}
 
 	}

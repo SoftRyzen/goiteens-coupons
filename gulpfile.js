@@ -3,6 +3,8 @@
 const
 	jsLibs = [
 		'./node_modules/bootstrap/dist/js/bootstrap.min.js',
+		'./assets/js/libs/moment.js',
+		'./assets/js/libs/daterangepicker.js',
 	],
 	jsWatch = [
 		'./assets/js/app.js'

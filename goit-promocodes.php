@@ -35,6 +35,18 @@ spl_autoload_register(function ($class) {
 	}
 });
 
+// Dump to log helper function
+if ( ! function_exists( 'wp_log' ) ) {
+	function wp_log( $var, $desc = ' >> ', $clear_log = false ) {
+		$log_file_destination = GOIT_PRMCODE_PATH . '/app/logs/dump.log';
+		if ( $clear_log ) {
+			file_put_contents( $log_file_destination, '' );
+		}
+		error_log( '[' . date( "H:i:s" ) . ']' . '-------------------------' . PHP_EOL, 3, $log_file_destination );
+		error_log( '[' . date( "H:i:s" ) . ']' . $desc . ' : ' . print_r( $var, true ) . PHP_EOL, 3, $log_file_destination );
+	}
+}
+
 /**
  * Global point of enter
  * It's a function that returns an instance of the `app` class. 

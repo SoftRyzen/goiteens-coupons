@@ -34,7 +34,7 @@ class backend
 
 		wp_enqueue_script('goiteens-promocodes-admin',
 			plugins_url('/assets/js/app.min.js', GOIT_PRMCODE_FILE),
-			['jquery'], '1.0', true
+			['jquery',], '1.0', true
 		);
 
 		wp_localize_script('goiteens-promocodes-admin', 'pluginVars', [
@@ -43,6 +43,7 @@ class backend
 			'adminURL'  => admin_url('/admin.php?page=goit_promocode'),
 			'postURL'  => admin_url('/admin.php?page=goit_promocode_post'),
 		]);
+
 
 	}
 
@@ -73,8 +74,16 @@ class backend
 			__('Статистика', 'goit_promocode'),
 			__('Статистика', 'goit_promocode'),
 			'manage_options',
-			'goit_promocode_statistics',
-			[$this, 'goit_promocode_statistics']
+			'goit_promocode_statistic',
+			[$this, 'goit_promocode_statistic']
+		);
+		add_submenu_page(
+			'goit_promocode',
+			__('Налаштування', 'goit_promocode'),
+			__('Налаштування', 'goit_promocode'),
+			'manage_options',
+			'goit_promocode_settings',
+			[$this, 'goit_promocode_settings']
 		);
 		add_submenu_page(
 		null,
@@ -95,13 +104,13 @@ class backend
 	/**
 	 *  Admin Nav - Dashboard Screen
 	 **/
-	function goit_promocode_statistics()
+	function goit_promocode_statistic()
 	{
-		GOIT_PRMCODE()->view->load('admin_menu/statistics');
+		GOIT_PRMCODE()->view->load('admin_menu/statistic');
 	}
 
 	/**
-	 *  Admin Nav - Coupons Screen
+	 *  Admin Nav - Promocodes Screen
 	 **/
 	function goit_promocode_screen()
 	{
@@ -109,11 +118,19 @@ class backend
 	}
 
 	/**
-	 *  Admin Nav - Add Coupon Screen
+	 *  Admin Nav - Add Page Screen
 	 **/
 	function goit_promocode_add()
 	{
 		GOIT_PRMCODE()->view->load('admin_menu/add');
+	}
+
+	/**
+	 *  Admin Nav - Settings Screen
+	 **/
+	function goit_promocode_settings()
+	{
+		GOIT_PRMCODE()->view->load('admin_menu/settings');
 	}
 
 }

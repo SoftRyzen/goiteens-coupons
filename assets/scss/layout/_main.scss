@@ -1,0 +1,36 @@
+.goit {
+	min-height: 100vh;
+
+	@import "header";
+
+	&__body {
+		display: grid;
+		align-items: start;
+		grid-column-gap: 24px;
+		padding-right: 24px;
+		margin: 24px 0;
+		@media (min-width: 768px) {
+			grid-template-columns: 2fr auto;
+		}
+		&.in-progress {
+			opacity: 0.3;
+			&,
+			* {
+				cursor: wait;
+			}
+		}
+	}
+	&__status {
+		&--success {
+			background-color: $primary-accent;
+			padding: 0 15px;
+			color: $white;
+			margin: 0 0 0 -20px;
+			overflow: hidden;
+			height: 40px;
+			display: flex;
+			align-items: center;
+		}
+	}
+	@import "footer";
+}

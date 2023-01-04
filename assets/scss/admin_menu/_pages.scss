@@ -1,20 +1,6 @@
-.goit-add {
-	min-height: 100vh;
-	&__body {
-		display: grid;
-		align-items: start;
-		grid-template-columns: 6fr repeat(1, 1fr);
-		grid-column-gap: 24px;
-		padding-right: 24px;
-		margin-top: 24px;
-		&.in-progress {
-			opacity: 0.3;
-			&,
-			* {
-				cursor: wait;
-			}
-		}
-	}
+.goit-post,
+.goit-add,
+.goit-edit {
 	// Separators
 	.searator {
 		&-left {
@@ -43,9 +29,10 @@
 	}
 	// Left Column
 	&__content {
+		margin-bottom: 24px;
 		> .row {
 			border-radius: 8px;
-			background-color: #fff;
+			background-color: $white;
 			box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
 			border-radius: 8px;
 			padding: 15px 0;
@@ -70,7 +57,8 @@
 				}
 			}
 		}
-		label {
+		label,
+		.label {
 			font-size: 14px;
 			color: $gray-color;
 			font-size: 13px;
@@ -144,7 +132,7 @@
 					box-shadow: 0 0 0 1px $green;
 				}
 			}
-			
+
 			&.in-progress {
 				border: 1px dotted $primary-accent;
 				&:focus {
@@ -186,6 +174,14 @@
 				}
 			}
 		}
+		h2 {
+			font-size: 22px;
+		}
+		h2,
+		h3,
+		h4 {
+			margin: 10px 0 0;
+		}
 	}
 	// Right Column
 	&__side {
@@ -193,6 +189,7 @@
 		box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
 		border-radius: 8px;
 		padding: 24px;
+		min-width: 250px;
 		&-header {
 			text-align: left;
 			background: #1d2327;
@@ -208,13 +205,40 @@
 				margin: 0;
 			}
 		}
+		&-body {
+			margin-bottom: 20px;
+		}
+		&-item {
+			position: relative;
+			display: flex;
+			justify-content: space-between;
+			padding-bottom: 10px;
+			&:not(:last-child) {
+				&:after {
+					content: "";
+					display: block;
+					width: 100%;
+					height: 1px;
+					background: #f5f6fa;
+					bottom: 0;
+					left: 0;
+					position: absolute;
+				}
+				margin-bottom: 10px;
+			}
+			.label {
+				max-width: 60%;
+			}
+		}
 		&-buttons {
 			display: flex;
-			flex-direction: column;
-			justify-content: flex-start;
-			column-gap: 20px;
+			flex-direction: row;
+			justify-content: center;
+			column-gap: 10px;
+			flex-wrap: wrap;
 		}
-		label {
+		label,
+		.label {
 			font-size: 14px;
 			color: $gray-color;
 			font-size: 13px;

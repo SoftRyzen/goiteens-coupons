@@ -14,14 +14,11 @@ $discount_tariff;
 
 foreach ($data['group_array'] as $item):
 
-	if (empty($discount_tariff))
-		$discount_tariff = $item->discount_tariff; // Type of discount ( percents / UAH / USD / EUR / PLN ) 
-
-	if (!$id_start)
-		$id_start = $item->id;
-
-	if ($id_start != $item->id)
+	if (!$id_end)
 		$id_end = $item->id;
+
+	if ($id_end != $item->id)
+		$id_start = $item->id;
 
 	if (empty($activete_count))
 		$activete_count = $item->activete_count;
@@ -52,9 +49,12 @@ foreach ($data['group_array'] as $item):
 	else
 		$promocode_limit += $item->promocode_limit;
 
+	if (empty($discount_tariff))
+		$discount_tariff = $item->discount_tariff; // Type of discount ( percent / UAH / USD / EUR / PLN ) 
+
 	if (empty($status)) {
 		$status = $item->promo_status;
-		if ($item->status > $promo_status)
+		if ($item->promo_status > $status)
 			$status = $item->promo_status;
 	}
 
@@ -62,9 +62,13 @@ foreach ($data['group_array'] as $item):
 
 endforeach; ?>
 
-<div data-group="<?php echo $promocod; ?>" class="goit-promocodes__group <?php if ($status == 0) {
-	   echo ' inactive';
-   } ?>">
+<div data-group="<?php echo $promocod; ?>" data-status="<?php if ($status == 2) {
+	   echo 'active';
+   } else {
+	   echo 'inactive';
+   } ?>" class="goit-promocodes__group <?php if ($status == 0) {
+	    echo ' inactive';
+    } ?>">
 	<div class="goit-promocodes__group-id">
 		<?php
         if ($id_end) {
@@ -74,20 +78,22 @@ endforeach; ?>
         } ?>
 	</div>
 	<div class="goit-promocodes__group-promocod">
-		<a href="<?php echo admin_url('/admin.php?page=goit_promocode_post&group=' . $promocod . '&action=edit') ?>">
-			Група <b><?php echo $promocod; ?></b>
+		<a href="<?php echo admin_url('/admin.php?page=goit_promocode_post&group=' . $promocod) ?>">
+			<?php _e('Група', 'goit_promocode'); ?> <b><?php echo $promocod; ?></b>
 		</a>
-		<div class=" row-actions">
-			<a href="#" data-action="deactivate">
-				<?php _e('Деактивувати'); ?>
+		<div class="actions">
+			<?php if ($status == 2) { ?>
+			<a href="#" data-id="<?php echo $promocod; ?>" data-new-status="inactive" data-type="group">
+				<?php _e('Деактивувати', 'goit_promocode'); ?><span> | </span>
 			</a>
-			<span> | </span>
-			<a href="#" data-action="edit">
-				<?php _e('Редагувати'); ?>
+			<?php } else if ($status == 1) { ?>
+			<a href="#" data-id="<?php echo $promocod; ?>" data-new-status="active" data-type="group">
+				<?php _e('Активувати', 'goit_promocode'); ?><span> | </span>
 			</a>
-			<span> | </span>
-			<a href="#">
-				<?php _e('Зупинити', 'goit_promocode'); ?>
+			<?php } ?>
+			<a
+				href="<?php echo admin_url('/admin.php?page=goit_promocode_post&group=' . $promocod . '&action=edit') ?>">
+				<?php _e('Редагувати', 'goit_promocode'); ?>
 			</a>
 		</div>
 	</div>
@@ -95,7 +101,7 @@ endforeach; ?>
 		<?php echo $activete_count; ?>
 	</div>
 	<div class="goit-promocodes__group-amount_payments">
-		<?php echo $amount_payments; ?>
+		<?php echo $amount_payments . ' UAH'; ?>
 	</div>
 	<div class="goit-promocodes__group-amount_surcharge">
 		<?php
@@ -110,21 +116,26 @@ endforeach; ?>
 	</div>
 	<div class="goit-promocodes__group-date_end">
 		<?php if ($date_end == '0000-00-00') {
-	        echo _e('Безкінечно', 'goit_promocode');
+	        _e('Безкінечно', 'goit_promocode');
         } else {
 	        echo date("d.m.Y", strtotime($date_end));
         } ?>
 	</div>
 	<div class="goit-promocodes__group-limit">
 		<?php
-        $percent = ($promocode_used / $promocode_limit) * 100;
-        if ($percent <= 5)
-	        $percent = 5; ?>
+        $percent = ($promocode_used / $promocode_limit) * 100; ?>
 
 		<div class="percent">
-			<span style="width: <?php echo $percent; ?>%"></span>
+			<?php if ($percent < 30): ?>
+			<span class="value"><?php echo round($percent); ?>%</span>
+			<?php endif; ?>
+			<span class="bar <?php if ($percent == 100)
+	            echo 'done' ?>" style="width: <?php if ($percent <= 5)
+	                  echo 5;
+                  else
+	                  echo $percent; ?>%"><?php if ($percent >= 30)
+	                        echo round($percent) . '%'; ?></span>
 		</div>
-
 		<?php
         echo $promocode_used . " / ";
         if ($promocode_limit > 0) {
@@ -137,15 +148,15 @@ endforeach; ?>
 	<div class="goit-promocodes__group-status">
 		<?php if ($status == 0) {
 	        echo '<div class="inactive">';
-	        echo _e('Не активний', 'goit_promocode');
+	        _e('Не активний', 'goit_promocode');
 	        echo '</div>';
         } else if ($status == 1) {
 	        echo '<div class="paused">';
-	        echo _e('На паузі', 'goit_promocode');
+	        _e('На паузі', 'goit_promocode');
 	        echo '</div>';
         } else {
 	        echo '<div class="actived">';
-	        echo _e('Активний', 'goit_promocode');
+	        _e('Активний', 'goit_promocode');
 	        echo '</div>';
         } ?>
 	</div>

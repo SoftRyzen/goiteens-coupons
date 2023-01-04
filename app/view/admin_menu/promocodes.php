@@ -12,7 +12,8 @@ $data = [
 	'item'        => [],
 	'group_array' => new ArrayObject(array()),
 	'group_count' => null,
-	'group_name'  => null
+	'group_name'  => null,
+	'url'         => true
 ];
 
 /* It's checking if the status, id and type are set. If they are, it's calling the function
@@ -29,7 +30,7 @@ $promocodes = GOIT_PRMCODE()->model->database->get_promocodes($search_value);
 $promo_counter = GOIT_PRMCODE()->model->database->get_promocodes_count($search_value);
 ?>
 
-<section class="goit-promocodes">
+<section class="goit">
 	<div class="goit__header-wrapper">
 		<h1>
 			<?php _e('Промокоди GoITeens', 'goit_promocode'); ?>
@@ -51,86 +52,96 @@ $promo_counter = GOIT_PRMCODE()->model->database->get_promocodes_count($search_v
 			<a href="#" data-status="inactive">Неактивні</a>
 		</div>
 		<div class="goit-promocodes__table-header">
-			<div> <?php _e("ID's", 'goit_promocode'); ?> </div>
+			<div>
+				<?php _e("ID's", 'goit_promocode'); ?>
+			</div>
 			<div> <?php _e('Промокод', 'goit_promocode'); ?> </div>
-			<div> <?php _e('Кількість оплат', 'goit_promocode'); ?> </div>
+			<div>
+				<?php _e('Кількість оплат', 'goit_promocode'); ?>
+			</div>
 			<div> <?php _e('Сума оплат', 'goit_promocode'); ?> </div>
-			<div> <?php _e('Сума знижки', 'goit_promocode'); ?> </div>
+			<div>
+				<?php _e('Сума знижки', 'goit_promocode'); ?>
+			</div>
 			<div> <?php _e('Початок', 'goit_promocode'); ?> </div>
-			<div> <?php _e('Кінець', 'goit_promocode'); ?> </div>
+			<div>
+				<?php _e('Кінець', 'goit_promocode'); ?>
+			</div>
 			<div> <?php _e('Використано (%)', 'goit_promocode'); ?> </div>
-			<div> <?php _e('Статус', 'goit_promocode'); ?> </div>
+			<div>
+				<?php _e('Статус', 'goit_promocode'); ?>
+			</div>
 		</div>
 		<div class="goit-promocodes__table-body">
 			<?php if ($promocodes):
-	            foreach ($promocodes as $key => $item):
-		            /**
+				foreach ($promocodes as $key => $item):
+					/**
 					 * It's checking if the promocode group is empty or not. 
 					 * If it's not empty, it's adding the promocode to the group.
 					 **/
 
-		            if (!empty($item->promocod_group) && $item->promocod_group == $data['group_name']
-		            	&& $key == array_key_last($promocodes)) {
+					if (!empty($item->promocod_group) && $item->promocod_group == $data['group_name']
+						&& $key == array_key_last($promocodes)) {
 
-			            $data['group_count']++;
-			            $data['group_array']->append($item);
-			            $data['group_name'] = $item->promocod_group;
+						$data['group_count']++;
+						$data['group_array']->append($item);
+						$data['group_name'] = $item->promocod_group;
 
-			            GOIT_PRMCODE()->view->load('admin_menu/template-parts/group-promocode', $data);
-			            $table_items++;
+						GOIT_PRMCODE()->view->load('admin_menu/template-parts/promocode-group', $data);
+						$table_items++;
 
-			            $data['group_array'] = new ArrayObject(array());
-			            $data['group_count'] = null;
-			            $data['group_name'] = null;
+						$data['group_array'] = new ArrayObject(array());
+						$data['group_count'] = null;
+						$data['group_name'] = null;
 
-		            } else if (
-		            	(!empty($item->promocod_group) && empty($data['group_name'])) ||
-		            	(!empty($item->promocod_group) && $item->promocod_group == $data['group_name'])
-		            ) {
+					} else if (
+						(!empty($item->promocod_group) && empty($data['group_name'])) ||
+						(!empty($item->promocod_group) && $item->promocod_group == $data['group_name'])
+					) {
 
-			            $data['group_count']++;
-			            $data['group_array']->append($item);
-			            $data['group_name'] = $item->promocod_group;
+						$data['group_count']++;
+						$data['group_array']->append($item);
+						$data['group_name'] = $item->promocod_group;
 
-		            } else if (!empty($item->promocod_group) && !empty($data['group_name']) && $item->promocod_group !== $data['group_name']) {
+					} else if (!empty($item->promocod_group) && !empty($data['group_name']) && $item->promocod_group !== $data['group_name']) {
 
-			            GOIT_PRMCODE()->view->load('admin_menu/template-parts/group-promocode', $data);
-			            $table_items++;
+						GOIT_PRMCODE()->view->load('admin_menu/template-parts/promocode-group', $data);
+						$table_items++;
 
-			            $data['group_array'] = new ArrayObject(array());
-			            $data['group_count'] = null;
-			            $data['group_name'] = null;
+						$data['group_array'] = new ArrayObject(array());
+						$data['group_count'] = null;
+						$data['group_name'] = null;
 
-			            $data['group_count']++;
-			            $data['group_array']->append($item);
-			            $data['group_name'] = $item->promocod_group;
+						$data['group_count']++;
+						$data['group_array']->append($item);
+						$data['group_name'] = $item->promocod_group;
 
-		            } else {
-			            if (!empty($data['group_name'])) {
-				            GOIT_PRMCODE()->view->load('admin_menu/template-parts/group-promocode', $data);
-				            $table_items++;
-			            }
-			            $data['group_array'] = new ArrayObject(array());
-			            $data['group_count'] = null;
-			            $data['group_name'] = null;
-		            }
+					} else {
+						if (!empty($data['group_name'])) {
+							GOIT_PRMCODE()->view->load('admin_menu/template-parts/promocode-group', $data);
+							$table_items++;
+						}
+						$data['group_array'] = new ArrayObject(array());
+						$data['group_count'] = null;
+						$data['group_name'] = null;
+					}
 
 
-		            if (empty($item->promocod_group) && empty($data['group_name'])) {
-			            $data['item'] = $item;
-			            $data['group_array'] = new ArrayObject(array());
-			            $data['group_count'] = null;
-			            $data['group_name'] = null;
-			            $table_items++;
-			            GOIT_PRMCODE()->view->load('admin_menu/template-parts/item-promocode', $data);
-		            }
+					if (empty($item->promocod_group) && empty($data['group_name'])) {
+						$data['item'] = $item;
+						$data['group_array'] = new ArrayObject(array());
+						$data['group_count'] = null;
+						$data['group_name'] = null;
+						$table_items++;
+						GOIT_PRMCODE()->view->load('admin_menu/template-parts/promocode-single', $data);
+					}
 
-            ?>
-			<?php endforeach; ?>
+					?>
+				<?php endforeach; ?>
 			<?php endif; ?>
 			<div class="not_found <?php if ($promocodes)
-	            echo 'hidden'; ?>">
-				<?php echo _e('Нічого не знайдено', 'goit_promocode'); ?>
+				echo 'hidden'; ?>">
+				<?php _e('Нічого не знайдено', 'goit_promocode'); ?>
 			</div>
 		</div>
 		<div class="goit-promocodes__table-footer">
@@ -139,6 +150,6 @@ $promo_counter = GOIT_PRMCODE()->model->database->get_promocodes_count($search_v
 			</div>
 		</div>
 
-		<?php GOIT_PRMCODE()->view->load('admin_menu/template-parts/footer'); ?>
 	</div>
+	<?php GOIT_PRMCODE()->view->load('admin_menu/template-parts/footer'); ?>
 </section>

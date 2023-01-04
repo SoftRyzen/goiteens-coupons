@@ -1,4 +1,4 @@
-.goit-promocodes {
+.goit-statistic {
 	&__table {
 		font-family: $font;
 
@@ -22,21 +22,28 @@
 		@media (max-width: 1280px) {
 			overflow-x: scroll;
 		}
-		&-tabs {
+		&-datepicker {
 			margin: 0 24px 24px 24px;
 			display: flex;
-			a {
-				color: $text-color;
-				padding: 8px 16px;
-				text-decoration: none;
-				border-radius: 50px;
-				&.active,
-				&:hover,
-				&:focus {
-					outline: none;
-					color: $white;
-					background: $primary;
+			align-items: center;
+			input#datepicker {
+				padding-right: 0;
+				padding-left: 20px;
+				margin-right: 20px;
+				&:active,
+				&:focus,
+				&:hover {
 					box-shadow: none;
+					border: 1px solid $text-color;
+				}
+			}
+			.result {
+				margin-left: auto;
+				span {
+					font-size: 16px;
+					padding: 0 10px 0 5px;
+					font-weight: 600;
+					color: $primary;
 				}
 			}
 		}
@@ -46,7 +53,7 @@
 			> * {
 				display: flex;
 				align-items: center;
-				width: calc(10% - 6.5px);
+				width: calc(16.6% - 6.5px);
 				min-width: 90px;
 				height: 40px;
 				padding: 5px 10px;
@@ -60,13 +67,6 @@
 				&:nth-child(2) {
 					width: calc(30% - 6.5px);
 					min-width: 180px;
-				}
-				&:nth-child(8) {
-					min-width: 135px;
-				}
-
-				&:last-child {
-					min-width: 120px;
 				}
 			}
 		}
@@ -85,6 +85,8 @@
 	&__group {
 		display: flex;
 		min-height: 60px;
+		text-decoration: none;
+		color: $text-color;
 		&.in-progress {
 			opacity: 0.3;
 			&,
@@ -93,9 +95,11 @@
 			}
 		}
 		> * {
-			width: calc(10% - 6.5px);
-			padding: 0 10px;
-			min-width: 90px;
+			&:not(.result) {
+				width: calc(16.6% - 6.5px);
+				padding: 0 10px;
+				min-width: 90px;
+			}
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
@@ -107,26 +111,20 @@
 				width: calc(30% - 6.5px);
 				min-width: 180px;
 			}
-			&:nth-child(8) {
-				min-width: 135px;
-			}
-			&:last-child {
-				min-width: 120px;
-				width: calc(10% - 6.5px);
-				text-align: center;
-			}
 		}
 		a {
-			color: #1b1b1b;
-			text-decoration: none;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			&:hover,
-			&:focus,
-			&:active {
-				color: $primary-dark;
-				box-shadow: none;
-				outline: none;
+			&:not(.goit-secondary-btn) {
+				color: #1b1b1b;
+				text-decoration: none;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				&:hover,
+				&:focus,
+				&:active {
+					color: $primary-dark;
+					box-shadow: none;
+					outline: none;
+				}
 			}
 		}
 		&-limit {

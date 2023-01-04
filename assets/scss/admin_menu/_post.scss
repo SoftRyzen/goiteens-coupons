@@ -1,0 +1,19 @@
+.goit-post {
+	&__content {
+		overflow: hidden;
+		> .row {
+			&.goit-post__all-promocodes {
+				padding: 0;
+				.actions {
+					display: none !important;
+				}
+			}
+		}
+	}
+	&__all-promocodes {
+		overflow-x: scroll;
+		> * {
+			min-width: 100%;
+		}
+	}
+}

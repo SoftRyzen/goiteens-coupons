@@ -11,7 +11,6 @@ class app
 {
 
 	private static $instance = null;
-
 	public $model;
 	public $view;
 	public $controller;
@@ -24,7 +23,7 @@ class app
 	public static function getInstance()
 	{
 		if (is_null(static::$instance)) {
-			static::$instance = new static();
+			static::$instance = new static ();
 		}
 
 		return static::$instance;
@@ -49,7 +48,7 @@ class app
 
 		session_start();
 
-		$this->current_lang = isset( $_SERVER['HTTP_X_GT_LANG']) ? $_SERVER['HTTP_X_GT_LANG'] : 'en';
+		$this->current_lang = isset($_SERVER['HTTP_X_GT_LANG']) ? $_SERVER['HTTP_X_GT_LANG'] : 'ua';
 
 		// Load core classes
 		$this->_dispatch();
@@ -92,8 +91,8 @@ class app
 	private function _load_modules($layer, $dir = '/')
 	{
 
-		$directory 	= GOIT_PRMCODE_PATH . '/app/' . $layer . $dir;
-		$handle    	= opendir($directory);
+		$directory = GOIT_PRMCODE_PATH . '/app/' . $layer . $dir;
+		$handle = opendir($directory);
 
 		if (count(glob("$directory/*")) === 0) {
 			return false;
@@ -121,7 +120,7 @@ class app
 	private function _load_controllers($list)
 	{
 
-		$directory 	= GOIT_PRMCODE_PATH . '/app/controller/';
+		$directory = GOIT_PRMCODE_PATH . '/app/controller/';
 
 		foreach ($list as $controller_name) {
 

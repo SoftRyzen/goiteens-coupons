@@ -1,8 +1,8 @@
-
 /*--------------------------------------------------------------
 # Librarys
 --------------------------------------------------------------*/
-@import '../../node_modules/bootstrap/dist/css/bootstrap-grid.min.css';
+@import "../../node_modules/bootstrap/dist/css/bootstrap-grid.min.css";
+@import "lib/daterangepicker.css";
 
 /*--------------------------------------------------------------
 # Variables
@@ -18,12 +18,13 @@
 # Layouts
 --------------------------------------------------------------*/
 @import "layout/wp";
+@import "layout/main";
 @import "layout/helper";
-@import "layout/header";
-@import "layout/footer";
 
 /*--------------------------------------------------------------
 # Page
 --------------------------------------------------------------*/
+@import "admin_menu/pages";
 @import "admin_menu/promocodes";
-@import "admin_menu/add"
+@import "admin_menu/statistic";
+@import "admin_menu/post";

@@ -1,72 +1,70 @@
-.goit {
-	&__header {
-		&-wrapper {
-			background: $white;
-			margin-left: -32px;
-			padding: 24px 32px;
-			display: flex;
-			flex-wrap: wrap;
-			align-items: center;
-			* {
-				font-family: $font;
+&__header {
+	&-wrapper {
+		background: $white;
+		margin-left: -32px;
+		padding: 24px 32px;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		* {
+			font-family: $font;
+		}
+		h1 {
+			display: inline-flex;
+		}
+		.page-title-action {
+			margin-left: 24px;
+			padding: 9px 18px;
+			position: relative;
+			text-align: center;
+			text-decoration: none;
+			border: 1px solid $primary;
+			text-shadow: none;
+			font-weight: 600;
+			font-size: 13px;
+			line-height: normal;
+			color: $primary;
+			background: #f6f7f7;
+			border-radius: 4px;
+			cursor: pointer;
+			&:hover {
+				background: #f0f0f1;
+				border-color: $accent;
+				color: $accent;
 			}
-			h1 {
-				display: inline-flex;
+			@media (min-width: 476px) and (max-width: 980px) {
+				margin-left: auto;
 			}
-			.page-title-action {
-				margin-left: 24px;
-				padding: 9px 18px;
-				position: relative;
-				text-align: center;
-				text-decoration: none;
+			@media (max-width: 475px) {
+				margin-left: 0;
+			}
+		}
+		form {
+			input {
 				border: 1px solid $primary;
-				text-shadow: none;
-				font-weight: 600;
-				font-size: 13px;
-				line-height: normal;
-				color: $primary;
-				background: #f6f7f7;
 				border-radius: 4px;
-				cursor: pointer;
-				&:hover {
-					background: #f0f0f1;
-					border-color: $accent;
-					color: $accent;
-				}
-				@media (min-width: 476px) and (max-width: 980px) {
-					margin-left: auto;
-				}
-				@media (max-width: 475px) {
-					margin-left: 0;
+				height: 40px;
+				padding: 10px 15px;
+				&,
+				&:hover,
+				&:focus,
+				&:active {
+					box-shadow: none;
+					outline: none;
 				}
 			}
-			form {
+			@media (min-width: 981px) {
+				margin-left: auto;
+			}
+			@media (max-width: 980px) {
+				width: 100%;
+				margin-top: 30px;
 				input {
-					border: 1px solid $primary;
-					border-radius: 4px;
-					height: 40px;
-					padding: 10px 15px;
-					&,
-					&:hover,
-					&:focus,
-					&:active {
-						box-shadow: none;
-						outline: none;
-					}
-				}
-				@media (min-width: 981px) {
-					margin-left: auto;
-				}
-				@media (max-width: 980px) {
 					width: 100%;
-					margin-top: 30px;
-					input {
-						width: 100%;
-					}
 				}
-				@media (max-width: 475px) {
-					margin-top: 10px;
-				}
+			}
+			@media (max-width: 475px) {
+				margin-top: 10px;
 			}
 		}
 	}

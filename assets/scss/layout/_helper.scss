@@ -1,7 +1,7 @@
 .goit-primary-btn,
 .goit-secondary-btn {
 	border-radius: 4px;
-	color: #fff;
+	color: $white;
 	padding: 8px 24px;
 	letter-spacing: 0.5px;
 	text-decoration: none;
@@ -26,9 +26,20 @@
 	&[disabled] {
 		background-color: $primary-accent;
 	}
+
+	&:hover,
+	&:focus,
+	&:active {
+		background-color: $primary-dark;
+	}
 }
 .goit-secondary-btn {
 	background: $accent;
+	&:hover,
+	&:focus,
+	&:active {
+		background-color: $primary-accent;
+	}
 }
 .hidden {
 	display: none !important;

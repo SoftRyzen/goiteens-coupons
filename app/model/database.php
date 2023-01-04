@@ -7,7 +7,7 @@ class database extends model
 	/**
 	 * It creates a table in the database
 	 */
-	public function create_table()
+	public function create_table(): void
 	{
 		$charset = $this->wpdb->get_charset_collate();
 		$promocodes = "CREATE TABLE {$this->tables['promocodes']} (
@@ -36,25 +36,40 @@ class database extends model
 		$order = "CREATE TABLE {$this->tables['order']} (
 			id mediumint(9) NOT NULL AUTO_INCREMENT,
 			promocod_id mediumint(9) NOT NULL,
+			invoice VARCHAR(19),
 			date_order DATE NOT NULL,
+			product_price mediumint(8),
+			discount mediumint(6),
+			discount_tariff VARCHAR(10) NOT NULL,
+			order_status smallint(1) NOT NULL,
+			UNIQUE KEY id (id)
+		) $charset;";
+		$tariff = "CREATE TABLE {$this->tables['tariff']} (
+			id mediumint(9) NOT NULL AUTO_INCREMENT,
+			tariff VARCHAR(50) NOT NULL,
+			promocod_id mediumint(9),
+			promocod_group VARCHAR(35),
+			amount_surcharge mediumint(9),
+			discount_tariff VARCHAR(10) NOT NULL,
 			UNIQUE KEY id (id)
 		) $charset;";
 
 		echo ABSPATH . 'wp-admin/includes/upgrade.php';
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
 		$this->wpdb->query($promocodes);
 		$this->wpdb->query($order);
+		$this->wpdb->query($tariff);
 	}
 
 	/**
 	 * If the table exists, drop it.
 	 */
-	public function drop_table()
+	public function drop_table(): void
 	{
-		$sql = "DROP TABLE IF EXISTS {$this->tables['promocodes']}";
-		$this->wpdb->query($sql);
-		$sql = "DROP TABLE IF EXISTS {$this->tables['order']}";
-		$this->wpdb->query($sql);
+		$this->wpdb->query("DROP TABLE IF EXISTS {$this->tables['promocodes']}");
+		$this->wpdb->query("DROP TABLE IF EXISTS {$this->tables['order']}");
+		$this->wpdb->query("DROP TABLE IF EXISTS {$this->tables['tariff']}");
 	}
 
 	/**
@@ -81,6 +96,7 @@ class database extends model
 	 * @param count the number of promocodes to generate
 	 */
 
+	//  Update to -> add_promocodes($data)
 	public function add_promocodes(
 		$promocod, $activete_count_user, $product, $tariff, $conditions,
 		$date_start, $date_end, $manager, $promo_status, $promocode_limit,
@@ -142,17 +158,42 @@ class database extends model
 		}
 	}
 
+	public function update_promocodes($data): void
+	{
+		$count = $data['count'];
+		$data = array(
+			"promocod"            => $data['promocod'],
+			"activete_count_user" => $data['activete_count_user'],
+			"product"             => $data['product'],
+			"tariff"              => $data['tariff'],
+			"conditions"          => $data['conditions'],
+			"date_start"          => $data['date_start'],
+			"date_end"            => $data['date_end'],
+			"promo_status"        => $data['promo_status'],
+			'promocode_limit'     => $data['promocode_limit'],
+			"amount_surcharge"    => $data['amount_surcharge'],
+			"discount_tariff"     => $data['discount_tariff'],
+			"msg_success"         => $data['msg_success'],
+			"msg_not_found"       => $data['msg_not_found'],
+			"msg_data_end"        => $data['msg_data_end']
+		);
+		if ($count == 1)
+			$this->wpdb->update($this->tables['promocodes'], $data, array("promocod" => $data['promocod']));
+		else
+			$this->wpdb->update($this->tables['promocodes'], $data, array("promocod_group" => $data['promocod']));
+
+	}
+
 	/**
 	 * It returns a list of promocodes from the database, optionally filtered by a search term and/or a
 	 * status.
 	 * 
 	 * @param sort This is the search term. If you want to search for a specific promo code, you can enter
 	 * it here.
-	 * @param status 2 = active, 1 = paused, 0 = inactive
-	 * 
+	 * 	 * 
 	 * @return Array The query is returning all the promocodes from the database.
 	 */
-	public function get_promocodes($sort = false, $status = 2)
+	public function get_promocodes($sort = false)
 	{
 		$query = "SELECT * FROM {$this->tables['promocodes']} ";
 		if ($sort)
@@ -179,15 +220,15 @@ class database extends model
 		return $this->wpdb->get_var("$query");
 	}
 
+
 	/**
 	 * It returns the number of rows in the database table
 	 * 
 	 * @param sort The search term
-	 * @param status 2 = active, 1 = paused, 0 = inactive
 	 * 
 	 * @return The number of rows in the table.
 	 */
-	public function get_promocodes_count($sort = false, $status = 2)
+	public function get_promocodes_count($sort = false)
 	{
 		$query = "SELECT COUNT(*) FROM {$this->tables['promocodes']} ";
 		if ($sort)
