@@ -1,0 +1,47 @@
+#products {
+	.goit {
+		&__table {
+			margin-top: 24px;
+			width: calc(100% - 20px);
+			&-header,
+			&-item {
+				> * {
+					overflow: hidden;
+					padding: 10px;
+					width: 40%;
+					&:first-child {
+						font-weight: 600;
+					}
+					&:last-child {
+						width: 20%;
+					}
+				}
+				a {
+					text-decoration: none;
+				}
+				&.current-product {
+					border-bottom: 2px solid $green;
+					> * {
+						background-color: $bg-green;
+						font-weight: 600;
+					}
+					a {
+						color: $text-color;
+						&:hover {
+							color: $primary;
+						}
+					}
+				}
+			}
+			&-footer {
+				padding: 24px;
+				margin: 0;
+				background: $primary;
+				color: $white;
+				b {
+					margin-left: 10px;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,70 @@
+#settings {
+	&.is-loading {
+		position: relative;
+		.goit-settings {
+			opacity: 0.3;
+		}
+	}
+	.goit-settings {
+		margin-top: 24px;
+		&__block {
+			background: #ffffff;
+			box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
+			border-radius: 8px;
+			overflow: hidden;
+			margin-bottom: 24px;
+			&-header {
+				background-color: $text-color;
+				color: $white;
+				padding: 24px;
+				font-size: 14px;
+				letter-spacing: 1px;
+			}
+			&-content {
+				padding: 24px;
+				input {
+					width: 100%;
+					+ label {
+						display: flex;
+						text-transform: uppercase;
+						margin-top: 15px;
+					}
+				}
+				label {
+					color: #8a92a6;
+					font-size: 13px;
+					line-height: 1.4em;
+				}
+			}
+		}
+		&__side {
+			background: $white;
+			box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
+			border-radius: 8px;
+			padding: 14px;
+			&-header {
+				text-align: left;
+				background: #f5f6fa;
+				margin: -14px -14px 14px -14px;
+				padding: 10px;
+				border-radius: 8px 8px 0 0;
+				h4 {
+					color: $gray-color;
+					text-transform: uppercase;
+					letter-spacing: 0.5px;
+					margin: 0;
+				}
+			}
+			&-buttons {
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+				column-gap: 10px;
+				flex-wrap: wrap;
+				a {
+					display: inline-flex;
+				}
+			}
+		}
+	}
+}
